@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import ProductItem from "./ProductItem";
+
 let isInitial = true;
 
 const DUMMY_DATA = [
@@ -37,17 +39,11 @@ const Products = () => {
     setData(DUMMY_DATA);
   }, []);
 
-  const movieData = data.map((movie) => (
-    <li key={movie.id}>
-      <h2>{movie.title}</h2>
-      <p>
-        <span>{movie.description}</span>
-      </p>
-      <span>{movie.price}</span>
-    </li>
+  const productsData = data.map((product) => (
+    <ProductItem key={product.id} product={product} />
   ));
 
-  return <ul>{movieData}</ul>;
+  return <ul>{productsData}</ul>;
 };
 
 export default Products;
