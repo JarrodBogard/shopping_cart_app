@@ -23,6 +23,7 @@ function App() {
     let existingItem = shoppingCart.products.find(
       (product) => product.id === newProduct.id
     );
+
     if (existingItem) {
       existingItem = {
         ...existingItem,
@@ -55,36 +56,50 @@ function App() {
   };
 
   const removeFromCartHandler = (id) => {
-    const updatedProducts = shoppingCart.filter((product) => product.id !== id);
+    if (shoppingCart.products.length === 0) return;
 
-    setshoppingCart((prevState) => {
-      return {
-        products: [updatedProducts],
-        totalQuantity: prevState.totalQuantity - 1,
-        totalAmount: prevState.totalAmount - 1,
+    let existingItem = shoppingCart.products.find(
+      (product) => product.id === id
+    );
+
+    if (existingItem.quantity > 1) {
+      existingItem = {
+        ...existingItem,
+        quantity: existingItem.quantity - 1,
+        totalPrice: existingItem.totalPrice - existingItem.price,
       };
-    });
-  };
 
-  console.log(shoppingCart, "cart");
+      let existingItemIndex = shoppingCart.products.findIndex(
+        (product) => product.id === existingItem.id
+      );
+
+      setshoppingCart((prevState) => {
+        prevState.products[existingItemIndex] = existingItem;
+        return {
+          products: [...prevState.products],
+          totalQuantity: prevState.totalQuantity - 1,
+          totalAmount: prevState.totalAmount - existingItem.price,
+        };
+      });
+    } else {
+      const updatedProducts = shoppingCart.products.filter(
+        (product) => product.id !== id
+      );
+
+      setshoppingCart((prevState) => {
+        return {
+          products: [...updatedProducts],
+          totalQuantity: prevState.totalQuantity - 1,
+          totalAmount: prevState.totalAmount - existingItem.price,
+        };
+      });
+    }
+  };
 
   return (
     <div className="App">
       <Navigation cartQuantity={shoppingCart.totalQuantity} />
       <Products />
-      <button
-        onClick={() =>
-          addToCartHandler({
-            id: "p4",
-            title: "Mission Impossible 3",
-            description: "More impossible than ever",
-            releaseYear: 2009,
-            price: 20.5,
-          })
-        }
-      >
-        click
-      </button>
     </div>
   );
 }
