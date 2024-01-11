@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Navigation from "./components/Navigation";
+import CartModal from "./components/CartModal";
 import Products from "./components/Products";
 
 function App() {
+  const [toggleCart, setToggleCart] = useState(false);
   const [shoppingCart, setshoppingCart] = useState({
     products: [],
     totalQuantity: 0,
@@ -96,10 +98,25 @@ function App() {
     }
   };
 
+  const toggleCartHandler = () => {
+    console.log(toggleCart);
+    setToggleCart(!toggleCart);
+  };
+
   return (
     <div className="App">
-      <Navigation cartQuantity={shoppingCart.totalQuantity} />
-      <Products />
+      <Navigation
+        cartQuantity={shoppingCart.totalQuantity}
+        onToggle={toggleCartHandler}
+      />
+      {toggleCart && (
+        <CartModal
+          data={shoppingCart}
+          onAdd={addToCartHandler}
+          onRemove={removeFromCartHandler}
+        />
+      )}
+      <Products onAdd={addToCartHandler} />
     </div>
   );
 }

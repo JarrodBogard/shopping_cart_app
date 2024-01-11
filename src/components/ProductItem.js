@@ -1,5 +1,6 @@
 const ProductItem = (props) => {
   const { title, description, price } = props.product;
+  const { onAdd } = props;
 
   const productData = (
     <li>
@@ -8,6 +9,7 @@ const ProductItem = (props) => {
         <span>{description}</span>
       </p>
       <span>{price}</span>
+      <button onClick={() => onAdd(props.product)}>Add to cart</button>
     </li>
   );
 

@@ -27,7 +27,7 @@ const DUMMY_DATA = [
     price: 29.99,
   },
 ];
-const Products = () => {
+const Products = (props) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const Products = () => {
   }, []);
 
   const productsData = data.map((product) => (
-    <ProductItem key={product.id} product={product} />
+    <ProductItem key={product.id} product={product} onAdd={props.onAdd} />
   ));
 
   return <ul>{productsData}</ul>;
