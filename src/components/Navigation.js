@@ -1,6 +1,6 @@
 import classes from "./Navigation.module.css";
 
-const Navigation = () => {
+const Navigation = ({ cartQuantity }) => {
   return (
     <header>
       <nav className={classes.navbar}>
@@ -8,7 +8,7 @@ const Navigation = () => {
           <span className={classes.logo}>Movies</span>
         </div>
         <div>
-          <span className={classes.cart}>Cart</span>
+          <span className={classes.cart}>Cart: {cartQuantity}</span>
         </div>
       </nav>
     </header>
