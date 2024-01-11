@@ -1,13 +1,15 @@
-const CartModal = (props) => {
+import Modal from "./UI/Modal";
+
+const Cart = (props) => {
   const { products, totalAmount } = props.data;
-  const { onAdd, onRemove } = props;
+  const { onAdd, onRemove, onToggle } = props;
 
   console.log(products);
 
   let cartData;
   if (products.length > 0) {
     cartData = products.map((product) => (
-      <>
+      <li key={product.id}>
         <div>
           <h2>{product.title}</h2>
           <p>
@@ -20,19 +22,27 @@ const CartModal = (props) => {
           <button onClick={() => onRemove(product.id)}>-</button>
           <button onClick={() => onAdd(product)}>+</button>
         </div>
-      </>
+      </li>
     ));
   }
 
   return (
-    <>
+    <Modal onClose={onToggle}>
       <div>
         <h2>Shopping Cart</h2>
         <span>Total: ${totalAmount.toFixed(2)}</span>
       </div>
-      {cartData}
-    </>
+      <ul>{cartData}</ul>
+      <button onClick={onToggle}>Close</button>
+      <button
+        onClick={() => {
+          console.log(props.data.products);
+        }}
+      >
+        Place order
+      </button>
+    </Modal>
   );
 };
 
-export default CartModal;
+export default Cart;

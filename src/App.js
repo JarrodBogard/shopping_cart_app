@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Navigation from "./components/Navigation";
-import CartModal from "./components/CartModal";
+import Cart from "./components/Cart";
 import Products from "./components/Products";
 
 function App() {
@@ -110,10 +110,11 @@ function App() {
         onToggle={toggleCartHandler}
       />
       {toggleCart && (
-        <CartModal
+        <Cart
           data={shoppingCart}
           onAdd={addToCartHandler}
           onRemove={removeFromCartHandler}
+          onToggle={toggleCartHandler}
         />
       )}
       <Products onAdd={addToCartHandler} />
