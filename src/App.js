@@ -1,20 +1,15 @@
 import { useState, useEffect } from "react";
-import Navigation from "./components/Navigation";
 import Cart from "./components/Cart";
 import Products from "./components/Products";
 import Notification from "./components/UI/Notification";
+import Layout from "./components/Layout";
 
 let isInitial = true;
 
 function App() {
   const [notification, setNotification] = useState(null);
   const [toggleCart, setToggleCart] = useState(false);
-  const [shoppingCart, setshoppingCart] = useState({
-    products: [],
-    totalQuantity: 0,
-    totalAmount: 0,
-    changed: false,
-  });
+  const [shoppingCart, setshoppingCart] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,10 +22,6 @@ function App() {
       }
 
       const responseData = await response.json();
-
-      // if (responseData.products) {
-      //   setshoppingCart(responseData);
-      // } else setshoppingCart({ ...responseData, products: [] });
 
       setshoppingCart({
         products: responseData.products || [],
@@ -59,7 +50,7 @@ function App() {
         `https://react-course-http-tutorial-default-rtdb.firebaseio.com/shoppingCart.json`,
         {
           method: "PUT",
-          body: JSON.stringify(shoppingCart),
+          body: JSON.stringify({ shoppingCart }),
         }
       );
 
@@ -200,22 +191,23 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <>
       {notification && <Notification notification={notification} />}
-      <Navigation
+      <Layout
         cartQuantity={shoppingCart.totalQuantity}
         onToggle={toggleCartHandler}
-      />
-      {toggleCart && (
-        <Cart
-          data={shoppingCart}
-          onAdd={addToCartHandler}
-          onRemove={removeFromCartHandler}
-          onToggle={toggleCartHandler}
-        />
-      )}
-      <Products onAdd={addToCartHandler} />
-    </div>
+      >
+        {toggleCart && (
+          <Cart
+            data={shoppingCart}
+            onAdd={addToCartHandler}
+            onRemove={removeFromCartHandler}
+            onToggle={toggleCartHandler}
+          />
+        )}
+        <Products onAdd={addToCartHandler} />
+      </Layout>
+    </>
   );
 }
 

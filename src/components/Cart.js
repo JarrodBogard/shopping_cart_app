@@ -1,4 +1,5 @@
 import Modal from "./UI/Modal";
+import CartItem from "./CartItem";
 
 const Cart = (props) => {
   const { products, totalAmount } = props.data;
@@ -7,20 +8,12 @@ const Cart = (props) => {
   let cartData;
   if (products.length > 0) {
     cartData = products.map((product) => (
-      <li key={product.id}>
-        <div>
-          <h2>{product.title}</h2>
-          <p>
-            {product.totalPrice}
-            <span>({product.price}/item)</span>
-          </p>
-        </div>
-        <div>
-          <h3>{product.quantity}</h3>
-          <button onClick={() => onRemove(product.id)}>-</button>
-          <button onClick={() => onAdd(product)}>+</button>
-        </div>
-      </li>
+      <CartItem
+        key={product.id}
+        product={product}
+        onAdd={onAdd}
+        onRemove={onRemove}
+      />
     ));
   }
 

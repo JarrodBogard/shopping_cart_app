@@ -1,17 +1,16 @@
+import CartButton from "./CartButton";
 import classes from "./Navigation.module.css";
 
 const Navigation = ({ cartQuantity, onToggle }) => {
   return (
     <header>
-      <nav className={classes.navbar}>
-        <div>
-          <span className={classes.logo}>Movies</span>
-        </div>
-        <div>
-          <span onClick={onToggle} className={classes.cart}>
-            Cart: {cartQuantity}
-          </span>
-        </div>
+      <h1>Movies</h1>
+      <nav>
+        <ul>
+          <li>
+            <CartButton onToggle={onToggle} cartQuantity={cartQuantity} />
+          </li>
+        </ul>
       </nav>
     </header>
   );
