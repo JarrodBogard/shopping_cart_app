@@ -1,22 +1,36 @@
+import { useDispatch } from "react-redux";
+import { cartActions } from "../../store/cart-slice";
+
 const CartItem = (props) => {
-  const { id, title, price, quantity, totalPrice } = props.product;
-  const { onAdd, onRemove } = props;
+  const { id, title, price, quantity, totalPrice } = props.item;
+
+  const dispatch = useDispatch();
+
+  const removeFromCartHandler = () => {
+    dispatch(cartActions.removeFromCart(id));
+  };
+
+  const addToCartHandler = () => {
+    dispatch(cartActions.addToCart(props.item));
+  };
 
   return (
-    <li key={id}>
+    <li>
       <header>
         <h3>{title}</h3>
         <div>
-          {totalPrice}
-          <span>({price}/item)</span>
+          {`$${Math.abs(totalPrice).toFixed(2)}`}
+          <span>({price.toFixed(2)}/item)</span>
         </div>
       </header>
       <div>
         <div>
           x <span>{quantity}</span>
         </div>
-        <button onClick={() => onRemove(id)}>-</button>
-        <button onClick={() => onAdd(props.product)}>+</button>
+        <div>
+          <button onClick={removeFromCartHandler}>-</button>
+          <button onClick={addToCartHandler}>+</button>
+        </div>
       </div>
     </li>
   );

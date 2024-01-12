@@ -1,19 +1,25 @@
+import { useDispatch } from "react-redux";
+import { cartActions } from "../../store/cart-slice";
 const ProductItem = (props) => {
   const { title, description, price } = props.product;
-  const { onAdd } = props;
+  const dispatch = useDispatch();
 
-  const productData = (
+  const addToCartHandler = () => {
+    dispatch(cartActions.addToCart(props.product));
+  };
+
+  return (
     <li>
-      <h2>{title}</h2>
-      <p>
-        <span>{description}</span>
-      </p>
-      <span>{price}</span>
-      <button onClick={() => onAdd(props.product)}>Add to cart</button>
+      <header>
+        <h3>{title}</h3>
+        <div>${price.toFixed(2)}</div>
+      </header>
+      <p>{description}</p>
+      <div>
+        <button onClick={addToCartHandler}>Add to cart</button>
+      </div>
     </li>
   );
-
-  return <>{productData}</>;
 };
 
 export default ProductItem;

@@ -23,12 +23,17 @@ const DUMMY_DATA = [
     price: 29.99,
   },
 ];
-const Products = (props) => {
+const Products = () => {
   const productsData = DUMMY_DATA.map((product) => (
-    <ProductItem key={product.id} product={product} onAdd={props.onAdd} />
+    <ProductItem key={product.id} product={product} />
   ));
 
-  return <ul>{productsData}</ul>;
+  return (
+    <section>
+      <h2>Buy your favorite movies</h2>
+      <ul>{productsData}</ul>;
+    </section>
+  );
 };
 
 export default Products;

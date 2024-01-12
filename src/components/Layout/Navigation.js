@@ -1,13 +1,13 @@
 import CartButton from "../Cart/CartButton";
 
-const Navigation = ({ cartQuantity, onToggle }) => {
+const Navigation = () => {
   return (
     <header>
       <h1>Movies</h1>
       <nav>
         <ul>
           <li>
-            <CartButton onToggle={onToggle} cartQuantity={cartQuantity} />
+            <CartButton />
           </li>
         </ul>
       </nav>

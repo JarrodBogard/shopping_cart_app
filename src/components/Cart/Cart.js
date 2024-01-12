@@ -1,33 +1,32 @@
+import { useSelector, useDispatch } from "react-redux";
+import { uiActions } from "../../store/ui-slice";
 import Modal from "../UI/Modal";
 import CartItem from "./CartItem";
 
-const Cart = (props) => {
-  const { products, totalAmount } = props.data;
-  const { onAdd, onRemove, onToggle } = props;
+const Cart = () => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
+  const total = useSelector((state) => state.cart.totalAmount);
 
-  let cartData;
-  if (products.length > 0) {
-    cartData = products.map((product) => (
-      <CartItem
-        key={product.id}
-        product={product}
-        onAdd={onAdd}
-        onRemove={onRemove}
-      />
-    ));
-  }
+  const cartItemsList = cartItems.map((item) => (
+    <CartItem key={item.id} item={item} />
+  ));
+
+  const showCartHandler = () => {
+    dispatch(uiActions.showCart());
+  };
 
   return (
-    <Modal onClose={onToggle}>
+    <Modal onClose={showCartHandler}>
       <div>
         <h2>Shopping Cart</h2>
-        <span>Total: {`$${Math.abs(totalAmount).toFixed(2)}`}</span>
+        <span>Total: {`$${Math.abs(total).toFixed(2)}`}</span>
       </div>
-      <ul>{cartData}</ul>
-      <button onClick={onToggle}>Close</button>
+      <ul>{cartItemsList}</ul>
+      <button onClick={showCartHandler}>Close</button>
       <button
         onClick={() => {
-          console.log(props.data.products);
+          console.log(cartItems);
         }}
       >
         Place order

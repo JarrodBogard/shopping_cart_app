@@ -1,17 +1,18 @@
-import classes from "./Notification.module.css";
+// import classes from "./Notification.module.css";
 
 const Notification = ({ notification }) => {
-  let specialClasses = "";
+  // let specialClasses = "";
 
   if (notification.status === "error") {
-    specialClasses = "classes.error";
+    // specialClasses = "classes.error";
   } else if (notification.status === "success") {
-    specialClasses = "classes.success";
+    // specialClasses = "classes.success";
   }
 
-  const cssClasseses = `${"classes.notification"} ${"specialClasses"}`;
+  const cssClasses = `${"classes.notification"} ${"specialClasses"}`;
+
   return (
-    <section className={cssClasseses}>
+    <section className={cssClasses}>
       <h2>{notification.title}</h2>
       <p>{notification.message}</p>
     </section>
