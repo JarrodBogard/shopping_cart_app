@@ -1,8 +1,4 @@
-import { useState, useEffect } from "react";
-
 import ProductItem from "./ProductItem";
-
-let isInitial = true;
 
 const DUMMY_DATA = [
   {
@@ -28,18 +24,7 @@ const DUMMY_DATA = [
   },
 ];
 const Products = (props) => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    if (isInitial) {
-      isInitial = false;
-      return;
-    }
-
-    setData(DUMMY_DATA);
-  }, []);
-
-  const productsData = data.map((product) => (
+  const productsData = DUMMY_DATA.map((product) => (
     <ProductItem key={product.id} product={product} onAdd={props.onAdd} />
   ));
 

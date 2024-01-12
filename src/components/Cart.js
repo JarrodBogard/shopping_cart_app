@@ -4,7 +4,7 @@ const Cart = (props) => {
   const { products, totalAmount } = props.data;
   const { onAdd, onRemove, onToggle } = props;
 
-  console.log(products);
+  console.log(props.data, "shopping cart Cart.js");
 
   let cartData;
   if (products.length > 0) {
@@ -30,7 +30,7 @@ const Cart = (props) => {
     <Modal onClose={onToggle}>
       <div>
         <h2>Shopping Cart</h2>
-        <span>Total: ${totalAmount.toFixed(2)}</span>
+        <span>Total: {`$${Math.abs(totalAmount).toFixed(2)}`}</span>
       </div>
       <ul>{cartData}</ul>
       <button onClick={onToggle}>Close</button>

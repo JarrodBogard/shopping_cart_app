@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "./components/Navigation";
 import Cart from "./components/Cart";
 import Products from "./components/Products";
+
+let isInitial = true;
 
 function App() {
   const [toggleCart, setToggleCart] = useState(false);
@@ -9,7 +11,62 @@ function App() {
     products: [],
     totalQuantity: 0,
     totalAmount: 0,
+    changed: false,
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `https://react-course-http-tutorial-default-rtdb.firebaseio.com/shoppingCart.json`
+      );
+
+      if (!response.ok) {
+        throw new Error("Unable to retrieve data");
+      }
+
+      const responseData = await response.json();
+
+      if (responseData.products) {
+        setshoppingCart(responseData);
+      } else setshoppingCart({ ...responseData, products: [] });
+
+      // setshoppingCart({
+      //   products: responseData.products || [],
+      //   totalQuantity: responseData.totalQuantity || 0,
+      //   totalAmount: responseData.totalAmount || 0,
+      // });
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(shoppingCart, "shopping cart App.js");
+  useEffect(() => {
+    const sendFetchData = async () => {
+      const response = await fetch(
+        `https://react-course-http-tutorial-default-rtdb.firebaseio.com/shoppingCart.json`,
+        {
+          method: "PUT",
+          body: JSON.stringify(shoppingCart),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Unable to send data");
+      }
+
+      console.log("data sent successfully");
+    };
+
+    if (isInitial) {
+      isInitial = false;
+      return;
+    }
+
+    if (shoppingCart.changed) {
+      sendFetchData().catch((error) => console.log(error));
+    }
+  }, [shoppingCart]);
 
   const addToCartHandler = (product) => {
     const newProduct = {
@@ -22,28 +79,34 @@ function App() {
       totalPrice: product.price,
     };
 
-    let existingItem = shoppingCart.products.find(
+    let existingProduct = shoppingCart.products.find(
       (product) => product.id === newProduct.id
     );
 
-    if (existingItem) {
-      existingItem = {
-        ...existingItem,
-        quantity: existingItem.quantity + 1,
-        totalPrice: existingItem.totalPrice + existingItem.price,
+    let updatedProduct;
+
+    if (existingProduct) {
+      updatedProduct = {
+        ...existingProduct,
+        quantity: existingProduct.quantity + 1,
+        totalPrice: existingProduct.totalPrice + existingProduct.price,
       };
 
-      const existingItemIndex = shoppingCart.products.findIndex(
-        (product) => product.id === existingItem.id
+      const existingProductIndex = shoppingCart.products.findIndex(
+        (product) => product.id === existingProduct.id
       );
 
+      let updatedProducts;
+
       setshoppingCart((prevState) => {
-        prevState.products[existingItemIndex] = existingItem;
+        updatedProducts = [...prevState.products];
+        updatedProducts[existingProductIndex] = updatedProduct;
 
         return {
-          products: [...prevState.products],
+          products: updatedProducts,
           totalQuantity: prevState.totalQuantity + 1,
           totalAmount: prevState.totalAmount + newProduct.price,
+          changed: true,
         };
       });
     } else {
@@ -52,6 +115,7 @@ function App() {
           products: [...prevState.products, newProduct],
           totalQuantity: prevState.totalQuantity + 1,
           totalAmount: prevState.totalAmount + newProduct.price,
+          changed: true,
         };
       });
     }
@@ -60,27 +124,34 @@ function App() {
   const removeFromCartHandler = (id) => {
     if (shoppingCart.products.length === 0) return;
 
-    let existingItem = shoppingCart.products.find(
+    let existingProduct = shoppingCart.products.find(
       (product) => product.id === id
     );
 
-    if (existingItem.quantity > 1) {
-      existingItem = {
-        ...existingItem,
-        quantity: existingItem.quantity - 1,
-        totalPrice: existingItem.totalPrice - existingItem.price,
+    let updatedProduct;
+
+    if (existingProduct.quantity > 1) {
+      updatedProduct = {
+        ...existingProduct,
+        quantity: existingProduct.quantity - 1,
+        totalPrice: existingProduct.totalPrice - existingProduct.price,
       };
 
-      let existingItemIndex = shoppingCart.products.findIndex(
-        (product) => product.id === existingItem.id
+      let existingProductIndex = shoppingCart.products.findIndex(
+        (product) => product.id === existingProduct.id
       );
 
+      let updatedProducts;
+
       setshoppingCart((prevState) => {
-        prevState.products[existingItemIndex] = existingItem;
+        updatedProducts = [...prevState.products];
+        updatedProducts[existingProductIndex] = updatedProduct;
+
         return {
-          products: [...prevState.products],
+          products: updatedProducts,
           totalQuantity: prevState.totalQuantity - 1,
-          totalAmount: prevState.totalAmount - existingItem.price,
+          totalAmount: prevState.totalAmount - existingProduct.price,
+          changed: true,
         };
       });
     } else {
@@ -92,14 +163,14 @@ function App() {
         return {
           products: [...updatedProducts],
           totalQuantity: prevState.totalQuantity - 1,
-          totalAmount: prevState.totalAmount - existingItem.price,
+          totalAmount: prevState.totalAmount - existingProduct.price,
+          changed: true,
         };
       });
     }
   };
 
   const toggleCartHandler = () => {
-    console.log(toggleCart);
     setToggleCart(!toggleCart);
   };
 
