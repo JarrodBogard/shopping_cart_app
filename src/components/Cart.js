@@ -4,8 +4,6 @@ const Cart = (props) => {
   const { products, totalAmount } = props.data;
   const { onAdd, onRemove, onToggle } = props;
 
-  console.log(props.data, "shopping cart Cart.js");
-
   let cartData;
   if (products.length > 0) {
     cartData = products.map((product) => (

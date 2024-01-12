@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import Navigation from "./components/Navigation";
 import Cart from "./components/Cart";
 import Products from "./components/Products";
+import Notification from "./components/UI/Notification";
 
 let isInitial = true;
 
 function App() {
+  const [notification, setNotification] = useState(null);
   const [toggleCart, setToggleCart] = useState(false);
   const [shoppingCart, setshoppingCart] = useState({
     products: [],
@@ -26,23 +28,33 @@ function App() {
 
       const responseData = await response.json();
 
-      if (responseData.products) {
-        setshoppingCart(responseData);
-      } else setshoppingCart({ ...responseData, products: [] });
+      // if (responseData.products) {
+      //   setshoppingCart(responseData);
+      // } else setshoppingCart({ ...responseData, products: [] });
 
-      // setshoppingCart({
-      //   products: responseData.products || [],
-      //   totalQuantity: responseData.totalQuantity || 0,
-      //   totalAmount: responseData.totalAmount || 0,
-      // });
+      setshoppingCart({
+        products: responseData.products || [],
+        totalQuantity: responseData.totalQuantity || 0,
+        totalAmount: responseData.totalAmount || 0,
+        changed: false,
+      });
     };
 
     fetchData();
   }, []);
 
-  console.log(shoppingCart, "shopping cart App.js");
   useEffect(() => {
+    if (isInitial) {
+      isInitial = false;
+
+      return;
+    }
     const sendFetchData = async () => {
+      setNotification({
+        status: "pending",
+        title: "Sending",
+        message: "Sending fetch request.",
+      });
       const response = await fetch(
         `https://react-course-http-tutorial-default-rtdb.firebaseio.com/shoppingCart.json`,
         {
@@ -55,16 +67,23 @@ function App() {
         throw new Error("Unable to send data");
       }
 
+      setNotification({
+        status: "success",
+        title: "Sent",
+        message: "Data sent successfully.",
+      });
+
       console.log("data sent successfully");
     };
 
-    if (isInitial) {
-      isInitial = false;
-      return;
-    }
-
     if (shoppingCart.changed) {
-      sendFetchData().catch((error) => console.log(error));
+      sendFetchData().catch((error) =>
+        setNotification({
+          status: "error",
+          title: "Failed",
+          message: "Unable to process request",
+        })
+      );
     }
   }, [shoppingCart]);
 
@@ -174,8 +193,15 @@ function App() {
     setToggleCart(!toggleCart);
   };
 
+  if (shoppingCart.changed) {
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000);
+  }
+
   return (
     <div className="App">
+      {notification && <Notification notification={notification} />}
       <Navigation
         cartQuantity={shoppingCart.totalQuantity}
         onToggle={toggleCartHandler}
