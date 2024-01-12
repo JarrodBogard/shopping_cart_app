@@ -1,5 +1,4 @@
-import CartButton from "./CartButton";
-import classes from "./Navigation.module.css";
+import CartButton from "../Cart/CartButton";
 
 const Navigation = ({ cartQuantity, onToggle }) => {
   return (

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Cart from "./components/Cart";
-import Products from "./components/Products";
+import Cart from "./components/Cart/Cart";
+import Products from "./components/Content/Products";
 import Notification from "./components/UI/Notification";
-import Layout from "./components/Layout";
+import Layout from "./components/Layout/Layout";
 
 let isInitial = true;
 

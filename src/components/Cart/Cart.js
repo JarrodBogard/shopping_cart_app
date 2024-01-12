@@ -1,4 +1,4 @@
-import Modal from "./UI/Modal";
+import Modal from "../UI/Modal";
 import CartItem from "./CartItem";
 
 const Cart = (props) => {
