@@ -5,12 +5,12 @@ const CartButton = () => {
   const dispatch = useDispatch();
   const cartQuantity = useSelector((state) => state.cart.totalQuantity);
 
-  const showCartHandler = () => {
-    dispatch(uiActions.showCart());
+  const toggleCartHandler = () => {
+    dispatch(uiActions.toggleCart());
   };
 
   return (
-    <button onClick={showCartHandler}>
+    <button onClick={toggleCartHandler}>
       <span>Cart:</span>
       <span>{cartQuantity}</span>
     </button>

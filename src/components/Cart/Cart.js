@@ -12,18 +12,18 @@ const Cart = () => {
     <CartItem key={item.id} item={item} />
   ));
 
-  const showCartHandler = () => {
-    dispatch(uiActions.showCart());
+  const toggleCartHandler = () => {
+    dispatch(uiActions.toggleCart());
   };
 
   return (
-    <Modal onClose={showCartHandler}>
+    <Modal onClose={toggleCartHandler}>
       <div>
         <h2>Shopping Cart</h2>
         <span>Total: {`$${Math.abs(total).toFixed(2)}`}</span>
       </div>
       <ul>{cartItemsList}</ul>
-      <button onClick={showCartHandler}>Close</button>
+      <button onClick={toggleCartHandler}>Close</button>
       <button
         onClick={() => {
           console.log(cartItems);
